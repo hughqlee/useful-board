@@ -18,7 +18,33 @@
 
 ## 설치
 
-[uv](https://docs.astral.sh/uv/)가 필요하다.
+[uv](https://docs.astral.sh/uv/)가 필요하다(MCP 서버를 `uvx`로 띄운다).
+
+### Claude 플러그인 (권장)
+
+Claude Code에서:
+
+```
+/plugin install useful-board --marketplace hughqlee/useful-board
+```
+
+또는 마켓플레이스를 먼저 추가한 뒤 설치:
+
+```
+/plugin marketplace add hughqlee/useful-board
+/plugin install useful-board@useful-board
+```
+
+설치 후 "보드 시작"이라고 말하면 `setup` 스킬이 첫 셋업을 하고 목표 인터뷰로 넘어간다.
+
+| 스킬 | 언제 |
+| --- | --- |
+| `setup` | 처음 설치했을 때, 서버가 안 뜰 때 |
+| `goal-interview` | 새 목표를 세우고 지표·행동 규칙을 정할 때 |
+| `board-check` | 값을 갱신하고 보드를 볼 때(매일 예약 실행 권장) |
+| `weekly-review` | 주 1회 할 일 정리, 쓸모없어진 항목 빼기 |
+
+### MCP 서버만 쓰기 (다른 에이전트)
 
 ```sh
 # 첫 셋업: ~/.useful-board/board.db 를 만들고 연결 설정을 보여 준다

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "useful-board": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/hughqlee/useful-board", "useful-board"]
+    }
+  }
+}
