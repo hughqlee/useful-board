@@ -1,0 +1,9 @@
+{
+  "name": "useful-board",
+  "version": "0.1.0",
+  "description": "목표를 세우고, 그 목표를 볼 지표를 정하고, 필요한 일이 진행되게 돕는 보드. 별도 앱이나 창 없이 대화 안에서만 보인다.",
+  "author": { "name": "hughqlee" },
+  "homepage": "https://github.com/hughqlee/useful-board",
+  "repository": "https://github.com/hughqlee/useful-board",
+  "keywords": ["goals", "dashboard", "habits", "mcp"]
+}
