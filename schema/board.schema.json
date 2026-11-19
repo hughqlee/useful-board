@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hughqlee/useful-board/schema/board.schema.json",
+  "title": "useful-board board.yaml",
+  "description": "목표 중심 보드 스펙. 보드 전체의 Item 합계 7개 이하 규칙은 JSON Schema로 표현할 수 없어 검증기가 따로 검사한다.",
+  "type": "object",
+  "required": ["board", "goals"],
+  "additionalProperties": false,
+  "properties": {
+    "board": { "type": "string", "minLength": 1, "description": "보드 이름" },
+    "owner": { "type": "string" },
+    "goals": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 7,
+      "items": { "$ref": "#/$defs/goal" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "date": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "goal": {
+      "type": "object",
+      "required": ["id", "title", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string", "minLength": 1, "description": "이루려는 것" },
+        "why": { "type": "string", "description": "왜 이루려는가" },
+        "due": { "$ref": "#/$defs/date" },
+        "state": { "enum": ["active", "done", "dropped"], "default": "active" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 7,
+          "items": { "$ref": "#/$defs/item" }
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "description": "원칙 2: question과 action_rule이 없으면 항목도 없다. 원칙 3: compare 필수. 원칙 7: review_by 필수.",
+      "required": ["id", "question", "metric", "compare", "action_rule", "refresh", "review_by"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "question": { "type": "string", "minLength": 1 },
+        "metric": { "$ref": "#/$defs/metric" },
+        "compare": { "$ref": "#/$defs/compare" },
+        "action_rule": { "type": "string", "minLength": 1, "description": "attention이 되면 무엇을 할지" },
+        "refresh": { "enum": ["hourly", "daily", "weekly", "monthly", "manual"] },
+        "review_by": { "$ref": "#/$defs/date" },
+        "widget": { "enum": ["number", "trend", "list", "check"], "description": "생략하면 지표 형태에서 정한다" }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "required": ["source", "unit"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "type": "string", "minLength": 1, "description": "예: sheets:가계부/저축, http:..., csv:..., manual" },
+        "compute": { "type": "string" },
+        "unit": { "type": "string", "minLength": 1 }
+      }
+    },
+    "compare": {
+      "type": "object",
+      "description": "목표치, 경고선, 직전 기간 비교 중 하나 이상",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "target": { "$ref": "#/$defs/condition" },
+        "warn": { "$ref": "#/$defs/condition" },
+        "vs_previous": { "enum": ["day", "week", "month", "quarter", "year"] }
+      }
+    },
+    "condition": {
+      "type": "string",
+      "pattern": "^(>=|<=|>|<|==)\\s*-?\\d+(\\.\\d+)?$",
+      "description": "예: \">= 420000\", \"< 300000\""
+    }
+  }
+}

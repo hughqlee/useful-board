@@ -1,0 +1,15 @@
+board: 현규의 보드
+owner: hughqlee
+goals:
+  - id: savings
+    title: 2027년 말까지 비상금 1,000만 원
+    why: 수입이 끊겨도 6개월 버틸 수 있게
+    due: 2027-12-31
+    items:
+      - id: monthly-saving
+        question: 이번 달 저축이 계획대로 가고 있나?
+        metric: { source: "sheets:가계부/저축", compute: "sum(this_month)", unit: 원 }
+        compare: { target: ">= 420000", warn: "< 300000" }
+        action_rule: 20일에 30만 원 미만이면 지출 상위 3개 항목 점검
+        refresh: daily
+        review_by: 2027-03-31
