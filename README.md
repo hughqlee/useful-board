@@ -92,3 +92,7 @@ SQLite 파일 하나(`board.db`). 서버 프로세스 하나만 열 수 있도�
 ```sh
 uv run --group dev pytest
 ```
+
+## 라이선스
+
+[MIT](LICENSE)
