@@ -60,7 +60,7 @@
 | Action | goal_id, item_id, text, due, state(open · done · dropped) | 지금 해야 할 일. Item이 attention이 되면 제안된다 |
 | Note | item_id, snapshot_id, text | "이 값은 왜?" 특정 시점 값에 단 기록 |
 
-스펙 형식은 [`schema/board.schema.json`](../schema/board.schema.json), 예시는 [`examples/savings.board.yaml`](../examples/savings.board.yaml)에 있다.
+스펙 형식은 [`src/useful_board/board.schema.json`](../src/useful_board/board.schema.json), 예시는 [`examples/savings.board.yaml`](../examples/savings.board.yaml)에 있다.
 
 Status 규칙은 단순하다. 마지막 Snapshot이 refresh 주기보다 오래되면 stale, warn을 넘으면 attention, 값이 없으면 unknown, 나머지는 ok다. Action을 한 번도 만들지 않고 review_by에 이른 Item은 삭제 후보로 제안된다.
 
@@ -114,7 +114,7 @@ MVP는 개인용이다. 공유는 그다음 단계이고 원칙은 같다. 공�
 | 에이전트 (표시·대화) | 보드 카드 표시, 경고 알림, Action 진행 돕기 | 사람이 이미 일하는 곳이다. 별도 창을 만들지 않는다 |
 | Claude 플러그인 | 목표 인터뷰 스킬, 주간 점검 스킬, 갱신 스케줄, 첫 셋업 | Claude에서의 경험. 없어도 코어는 다른 에이전트에서 돈다 |
 
-MCP 도구는 작게 유지한다: `board_get`, `goal_set`, `item_propose`, `item_remove`, `snapshot_record`, `board_evaluate`, `action_add`, `action_update`, `note_add`. 추가는 항상 `item_propose`를 거치고, 서버가 원칙 2·3·6·7을 검사해 거부 사유를 돌려준다.
+MCP 도구는 작게 유지한다: `board_get`, `goal_set`, `item_propose`, `item_remove`, `snapshot_record`, `board_evaluate`, `action_add`, `action_update`, `note_add`, 그리고 board.yaml 내보내기·가져오기용 `board_export`, `board_import`. 추가는 항상 `item_propose`를 거치고, 서버가 원칙 2·3·6·7을 검사해 거부 사유를 돌려준다.
 
 **저장은 SQLite, 첫 셋업에서 함께 구성한다.** 플러그인을 설치하면 첫 셋업이 MCP 서버를 올리고 SQLite 파일 하나를 만든다. 스펙·Snapshot·Action·Note는 모두 이 파일에 있고, board.yaml은 검토와 이식을 위한 내보내기·가져오기 형식이 된다.
 
@@ -129,7 +129,7 @@ SQLite로 충분한 이유는 데이터의 크기와 쓰기 패턴이다. 보드
 MVP는 개인 한 사람이 목표 1~3개를 세우고, 4주 동안 에이전트 안에서만 보드를 쓰는 것까지다. 직업은 가리지 않는다.
 
 1. 스키마와 검증기: Goal·Item·Action, 원칙 2·3·6·7을 코드로 강제
-2. 로컬 MCP 서버: 도구 9개 + 첫 셋업에서 SQLite 파일 생성(스키마, WAL, 백업 주기). 인증 없음
+2. 로컬 MCP 서버: 도구 11개 + 첫 셋업에서 SQLite 파일 생성(스키마, WAL, 백업 주기). 인증 없음
 3. 보드 카드: 에이전트 대화 안에 그리는 한 화면
 4. Claude 플러그인: 목표 인터뷰 스킬(목표 → 지표 → 행동 규칙), 매일 갱신과 경고 알림, 주 1회 점검 스킬
 5. 검증할 목표 예: 저축, 체중·운동, 책 집필, 구직, 작은 가게 매출
